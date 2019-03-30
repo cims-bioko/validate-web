@@ -1,19 +1,32 @@
 package com.github.cimsbioko.validator;
 
-import org.opendatakit.validate.FormValidator;
-import org.springframework.stereotype.Service;
+import com.github.cimsbioko.validate.Result;
+import com.github.cimsbioko.validate.ResultBuilder;
+import com.github.cimsbioko.validate.XFormValidator;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.InputStream;
+import java.io.IOException;
 
-@Service
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+
+@RestController
 public class ValidatorService {
 
-    public ValidatorResult validate(InputStream xmlSource) {
-        FormValidator validator = new FormValidator();
-        ResultBuilder resultBuilder = new ResultBuilder(validator);
-        validator.setErrorListener(resultBuilder);
-        validator.validate(xmlSource);
-        return resultBuilder.buildResult();
+    @PostMapping(consumes = APPLICATION_XML_VALUE)
+    public ResponseEntity<Result> validate(@RequestBody Resource xmlBody) throws IOException {
+        ResultBuilder resultBuilder = new ResultBuilder();
+        XFormValidator validator = new XFormValidator(resultBuilder);
+        validator.validateStream(xmlBody.getInputStream());
+        Result result = resultBuilder.buildResult();
+        if (result.hasFailed()) {
+            return ResponseEntity.badRequest().body(result);
+        } else {
+            return ResponseEntity.ok(result);
+        }
     }
 
 }
