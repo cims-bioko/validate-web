@@ -1,4 +1,4 @@
-package com.github.cimsbioko.validator;
+package com.github.cimsbioko.validateweb;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

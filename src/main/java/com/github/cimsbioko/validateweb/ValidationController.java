@@ -1,4 +1,4 @@
-package com.github.cimsbioko.validator;
+package com.github.cimsbioko.validateweb;
 
 import com.github.cimsbioko.validate.Result;
 import com.github.cimsbioko.validate.ResultBuilder;
