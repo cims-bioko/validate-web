@@ -14,7 +14,7 @@ import java.io.IOException;
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @RestController
-public class ValidatorService {
+public class ValidationController {
 
     @PostMapping(consumes = APPLICATION_XML_VALUE)
     public ResponseEntity<Result> validate(@RequestBody Resource xmlBody) throws IOException {
