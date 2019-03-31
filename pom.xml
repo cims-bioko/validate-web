@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <jarFilename>${project.build.finalName}.${project.packaging}</jarFilename>
     </properties>
 
     <dependencies>
@@ -46,7 +47,35 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.21.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>cimsbioko/${project.artifactId}:${project.version}</name>
+                            <alias>${project.artifactId}</alias>
+                            <build>
+                                <dockerFileDir>app</dockerFileDir>
+                                <assembly>
+                                    <name>app</name>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-docker-image</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
 </project>
