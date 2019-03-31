@@ -17,7 +17,7 @@ import static org.springframework.web.reactive.function.BodyInserters.fromResour
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
-public class ValidatorApplicationTests {
+public class ApplicationTests {
 
     @Autowired
     private WebTestClient client;
