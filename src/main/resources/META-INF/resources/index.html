@@ -10,7 +10,10 @@
                 font-family: sans-serif;
                 font-size: small;
             }
-            #result, #output {
+            #result-container, #loading {
+                display: none;
+            }
+            #result, #output, #loading {
                 font-family: monospace;
                 margin-top: 1em;
             }
@@ -24,6 +27,40 @@
             input {
                 margin-top: .5em;
             }
+            .loading-bar {
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                border-radius: 4px;
+                animation: loading 1s ease-in-out infinite;
+            }
+            .loading-bar:nth-child(1) {
+                background-color: #3498db;
+                animation-delay: 0s;
+            }
+            .loading-bar:nth-child(2) {
+                background-color: #c0392b;
+                animation-delay: 0.09s;
+            }
+            .loading-bar:nth-child(3) {
+                background-color: #f1c40f;
+                animation-delay: .18s;
+            }
+            .loading-bar:nth-child(4) {
+                background-color: #27ae60;
+                animation-delay: .27s;
+            }
+            @keyframes loading {
+                0% {
+                    transform: scale(1);
+                }
+                20% {
+                    transform: scale(1, 2.2);
+                }
+                40% {
+                    transform: scale(1);
+                }
+            }
         </style>
     </head>
     <body>
@@ -32,20 +69,25 @@
         <form action="/">
             <label for="xform">Form:</label>
             <input id="xform" type="file" name="xform" accept="application/xml" required/>
-            <input type="submit" value="Validate" />
+            <input id="submit" type="submit" value="Validate" />
         </form>
     </body>
-    <div id="result"></div>
-    <div id="output"></div>
+    <div id="loading">
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+    </div>
+    <div id="result-container">
+        <div id="result"></div>
+        <div id="output"></div>
+    </div>
     <script src="/webjars/jquery/3.4.0/jquery.min.js"></script>
     <script>
         $(function() {
             $('form').submit(function(event) {
 
                 event.preventDefault(); // stop submit action
-
-                var $output = $('#output');
-                $output.empty();
 
                 function entryToElement(entry) {
                     return $('<div' + (entry.error? ' class="error"' : '') + '>' + entry.message + '</div>');
@@ -60,7 +102,21 @@
                     }
                 }
 
+                function showLoading(show) {
+                    var $results = $('#result-container');
+                    var $loading = $('#loading');
+                    if (show) {
+                        $results.hide();
+                        $loading.show();
+                    } else {
+                        $results.show();
+                        $loading.hide();
+                    }
+                }
+
                 var form = this;
+                var $output = $('#output');
+                var $button = $('#submit');
 
                 $.ajax({
                     type: 'POST',
@@ -69,11 +125,20 @@
                     processData: false,
                     contentType: false,
                     dataType: "json",
+                    beforeSend: function() {
+                        $output.empty();
+                        $button.prop('disabled', true);
+                        showLoading(true);
+                    },
                     success: function(data) {
                         updateStatus(data);
                     },
                     error: function(jqXHR) {
                         updateStatus(jqXHR.responseJSON);
+                    },
+                    complete: function() {
+                        showLoading(false);
+                        $button.prop('disabled', false);
                     }
                 });
             });
