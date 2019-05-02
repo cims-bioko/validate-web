@@ -20,11 +20,11 @@ The above features are addressed as follows:
   * 100% ODK compatible: the service is based on the same javarosa library specifically to decrease 
     the opportunity for incompatibilities
 
-Rather than being bundled with XLSForm conversion, validation is handled separately due to the fact that it:
+Rather than being bundled with XLSForm conversion, validation is handled separately because:
 
-  * is useful outside of XLSForm conversion
-  * it requires a completely different runtime, Java, and its own dependencies
-  * by splitting it out, both services can benefit from the same design benefits listed above
+  * It is useful outside of XLSForm conversion
+  * It requires a completely different runtime, Java, and its own dependencies
+  * Deployed separately, both services can benefit from the same benefits listed above
 
  
 ## Requirements
