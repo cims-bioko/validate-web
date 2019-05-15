@@ -13,7 +13,7 @@
 
     <groupId>com.github.cims-bioko</groupId>
     <artifactId>validate-web</artifactId>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
 
     <name>validate-web</name>
     <description>
